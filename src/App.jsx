@@ -1,28 +1,37 @@
 import { useState } from 'react'
+import Entrance from './components/Entrance'
+import CuratorsIndex from './components/CuratorsIndex'
+import Gallery from './components/Gallery'
+import Philosophy from './components/Philosophy'
+import Studio from './components/Studio'
 
-function App() {
-  const [count, setCount] = useState(0)
+const bg = '#0B1220' // Midnight Navy
+const ivory = '#F5F0E6' // Warm Ivory
+
+export default function App() {
+  const [showEntrance, setShowEntrance] = useState(true)
+  const [section, setSection] = useState('index') // index | work | philosophy | studio
+
+  const handleEnter = () => setShowEntrance(false)
+  const backToIndex = () => setSection('index')
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen font-sans" style={{ backgroundColor: bg, color: ivory }}>
+      <Entrance open={showEntrance} onEnter={handleEnter} />
+
+      {!showEntrance && section === 'index' && (
+        <CuratorsIndex onSelect={setSection} />
+      )}
+
+      {!showEntrance && section === 'work' && <Gallery onBack={backToIndex} />}
+      {!showEntrance && section === 'philosophy' && (
+        <Philosophy onBack={backToIndex} />
+      )}
+      {!showEntrance && section === 'studio' && <Studio onBack={backToIndex} />}
+
+      <footer className="fixed bottom-6 left-1/2 -translate-x-1/2 text-xs tracking-widest opacity-60">
+        © {new Date().getFullYear()} Digital Atelier — Private Viewing
+      </footer>
     </div>
   )
 }
-
-export default App
